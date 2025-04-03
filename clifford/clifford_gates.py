@@ -12,8 +12,8 @@ def closest_clifford(angle):
     return closest
 
 # File paths
-input_qasm_path = '/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_1_30q.qasm'
-output_qasm_path = '/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_1_30q_clifford.qasm'
+input_qasm_path = './circuit_1_30q.qasm'
+output_qasm_path = './circuit_1_30q_clifford.qasm'
 
 # Read the original circuit from the QASM file as text
 with open(input_qasm_path, 'r') as file:

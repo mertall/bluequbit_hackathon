@@ -214,5 +214,5 @@ def main(qasm_file_path):
     display_results_qiskit(counts)
 
 if __name__ == "__main__":
-    qasm_file_path = '/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_2_42q.qasm'
+    qasm_file_path = './circuit_2_42q.qasm'
     main(qasm_file_path)

@@ -3,7 +3,7 @@ import random
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 
-qc = QuantumCircuit.from_qasm_file('/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_2_42q.qasm')
+qc = QuantumCircuit.from_qasm_file('./circuit_2_42q.qasm')
 
 # Execute the circuit on the qasm simulator
 simulator = AerSimulator(method="matrix_product_state")

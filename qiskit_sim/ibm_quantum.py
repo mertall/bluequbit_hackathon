@@ -2,13 +2,13 @@ import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit_ibm_runtime import QiskitRuntimeService
 # If you did not previously save your credentials, use the following line instead:
-service = QiskitRuntimeService(channel="ibm_quantum", token="dd092bb433cd48d6fd170052c81a1efb0dd47bd54c756bb5fa8193a5a081fd0b2c148354887791050c5d7e579a9fd7d828981ff03ce3cd9a6300e46fc61e5b68")
+service = QiskitRuntimeService(channel="ibm_quantum", token="")
  
 backend = service.least_busy(simulator=False, operational=True)
 
 
 # Load the quantum circuit from the QASM file
-qc = QuantumCircuit.from_qasm_file('/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_1_30q_clifford.qasm')
+qc = QuantumCircuit.from_qasm_file('./circuit_1_30q_clifford.qasm')
 
 # Transpile the circuit for the selected backend
 print("Transpiling circuit for IBM backend...")

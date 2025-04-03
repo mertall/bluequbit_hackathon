@@ -148,7 +148,7 @@ def plot_qubit_state_distribution(qubit_state_counts, qubit_index):
     plt.show()
 
 def main():
-    qasm_file = "/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_3_60q.qasm"
+    qasm_file = "./circuit_3_60q.qasm"
     
     # Load the QASM file
     qc = load_qasm_file(qasm_file)

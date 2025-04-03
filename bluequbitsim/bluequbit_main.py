@@ -8,7 +8,7 @@ bq = bluequbit.init("<API KEY>")
 
 # Load your circuits from the QASM files
 print("Loading 30-qubit circuit from QASM file...")
-qc_30q = QuantumCircuit.from_qasm_file('/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_1_30q.qasm')
+qc_30q = QuantumCircuit.from_qasm_file('./circuit_1_30q.qasm')
 print("30-qubit circuit loaded.\n")
 
 # Run the simulation

@@ -113,7 +113,7 @@ def prune_graph_knn(G, k=35):
 
 def main():
     # Path to your QASM file
-    qasm_file = "/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_2_42q.qasm"
+    qasm_file = "./circuit_2_42q.qasm"
     
     # Load the QASM file
     qc = load_qasm_file(qasm_file)

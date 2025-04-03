@@ -7,7 +7,7 @@ exclude_qubits = {'33', '12', '23', '28', '29', '30', '31'}
 
 # Sample input circuit as a multi-line string
 # Replace this string with your actual circuit code
-file_path = "/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_2_42q.qasm"
+file_path = "./circuit_2_42q.qasm"
 with open(file_path, 'r') as file:
             circuit = file.read()
 # Step 1: Remove lines involving excluded qubits

@@ -43,7 +43,7 @@ from qiskit_aer import AerSimulator
 #         qc.cz(qr[l], qr[m])
 
 # qc.measure(qr, cr)
-qc = QuantumCircuit.from_qasm_file('/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_3_60q.qasm')
+qc = QuantumCircuit.from_qasm_file('./circuit_3_60q.qasm')
 
 # Execute the circuit on the qasm simulator
 simulator = AerSimulator(method='matrix_product_state')
