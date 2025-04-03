@@ -41,3 +41,7 @@ Notice the similarity between the 30 Qubit and 60 Qubit networks. Initially, I t
 ## Optimized 60 Qubit Tensor Network
 
 ![Optimized 60 Qubit Tensor Network](/tensor_networks/amplitude_rehearse_ADCRS_60.png)
+
+## Optimized 30 Qubit Tensor Network
+
+![Optimized 30 Qubit Tensor Network](/tensor_networks/amplitude_rehearse_ADCRS_30.png)
