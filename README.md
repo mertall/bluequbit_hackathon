@@ -1,7 +1,7 @@
 # BlueQubit Hackathon
 # Project Overview
 
-This repository documents the progression of solving computational problems using various optimization techniques, culminating in the use of Tensor Networks for accurate results. Below is the step-by-step evolution of the approach:
+This repository documents the progression of solving [[peak circuits](https://arxiv.org/abs/2404.14493)]using various computational techniques, culminating in the use of Tensor Networks for results. Below is the step-by-step evolution of the approach:
 
 ## Hackathon Work
 1. **Brute Force with GPU Credits**: Leveraged GPU resources for initial brute force solutions.
@@ -69,7 +69,7 @@ minimize="combo" (a balanced cost function)
 parallel=True to utilize multiple CPU cores
 A limited max_time to prevent overlong optimization
 
-### Sampling Strategy 
+### Sampling Strategy
 
 We perform sampling using a gate-by-gate approach. This method calculates the marginal probability distribution for a small group of qubits (controlled by group_size) in sequence. The contraction paths are pre-optimized with sample_gate_by_gate_rehearse(), and then the circuit is sampled continuously.
 Samples are streamed directly to a text file. Larger sample sizes led to memory leaks due to running locally.
