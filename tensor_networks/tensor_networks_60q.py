@@ -1,46 +1,60 @@
 import quimb.tensor as qtn
 import numpy as np
 import cotengra as ctg
-
 from collections import defaultdict
+from multiprocessing import freeze_support
 
-# Setup
-circ = qtn.Circuit(N=60)
-print("Loading circuit...")
-tensor_network_circuit = circ.from_openqasm2_file('/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_3_60q.qasm')
+def main():
+    # Setup: Initialize the circuit with 60 qubits and load the QASM file.
+    circ = qtn.Circuit(N=60)
+    print("Loading circuit...")
+    tensor_network_circuit = circ.from_openqasm2_file(
+        '/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_3_60q.qasm'
+    )
+    print("Circuit loaded.\n")
 
-opt = ctg.ReusableHyperOptimizer(
-    minimize="combo",
-    reconf_opts={},
-    parallel=True,
-    optlib="cmaes",
-    max_time="rate:1e8",
-    hash_method="b",
-    directory=True,
-    progbar=True,
-)
+    # Setup the contraction optimizer using cotengra.
+    opt = ctg.ReusableHyperOptimizer(
+        parallel=True,
+        optlib="optuna",  # Using nevergrad for faster performance.
+        max_time="rate:1e8",  # Limit optimization time.
+        directory=True,
+        progbar=True,
+    )
 
-# Rehearse once
-print("Optimizing contraction path...")
-tensor_network_circuit.sample_gate_by_gate_rehearse(group_size=20, optimize=opt, simplify_sequence="ADCRS")
+    # Rehearse the sampling path (pre-optimizes contraction paths for each marginal).
+    print("Optimizing contraction path...")
+    rehs = tensor_network_circuit.sample_gate_by_gate_rehearse(
+        group_size=10,
+        optimize=opt,
+        simplify_sequence="ADCRS"  # Use a simpler sequence to reduce overhead.
+    )
+    
+    # Prepare to continuously sample and save each bitstring to a file.
+    output_file = "./tensor_networks/samples.txt"
+    # Open file in append mode (creates the file if it doesn't exist).
+    with open(output_file, "a") as f:
+        print("Starting continuous sampling and appending to file...")
+        bitstring_counts = defaultdict(int)
+        rng = np.random.default_rng(42)
+        sample_batch_size = 1  # Number of samples per batch.
+        
+        # Continuous sampling loop.
+        while True:
+            for b in tensor_network_circuit.sample_gate_by_gate(
+                sample_batch_size,
+                group_size=10,
+                optimize=opt,
+                simplify_sequence="ADCRS",
+                seed=rng
+            ):
+                # Update count (optional, for later analysis)
+                bitstring_counts[b] += 1
+                # Append the sampled bitstring to the file.
+                f.write(b + "\n")
+                f.flush()  # Flush to disk to ensure persistence on interruption.
+                print(b)
 
-# Sample in a loop
-rng = np.random.default_rng(42)
-bitstring_counts = defaultdict(int)
-
-print("Sampling bitstrings (streamed)...")
-num_samples = 1000  # You can tune this based on system memory
-
-for b in tensor_network_circuit.sample_gate_by_gate(
-    num_samples,
-    group_size=20,
-    optimize=opt,
-    seed=rng,
-    simplify_sequence="ADCRS"
-):
-    bitstring_counts[b] += 1
-
-# Get the most common one
-most_common = max(bitstring_counts.items(), key=lambda item: item[1])
-print(f"\nMost common bitstring:\n{most_common[0]} → {most_common[1]} times (out of {num_samples})")
-
+if __name__ == '__main__':
+    freeze_support()
+    main()
