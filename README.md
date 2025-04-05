@@ -84,6 +84,6 @@ For the 60-qubit circuit, after sampling and analyzing many results, the dominan
 Started thinking about how we can analyze how many samples it takes to find the right string. For my analysis it took 35 samples in 56 minutes 52.10 seconds. I challenge you to beat this!!
 (I used a M3 Macbook Air with 16 GB RAM)
 
-## Huersitic analysis
+## Hueristic analysis
 
 We will present a heuristic study of classical strategies for identifying a hidden bitstring in δ-peaked quantum circuits, circuits whose output distribution is dominated by a single bitstring. While worst-case analyses indicate exponential scaling with circuit size and treewidth, in practice one can exploit path-finding optimizers, partial reuse of contraction paths (rehearsal), and approximate final result to reduce overhead. We outline an experimental setup that systematically varies tensor contraction optimization parameters (group size, optimizer choice, simplification recipes, batch sampling) and measures runtime performance, average sample time, and time to achieve a target bitstring via majority vote. Our results show that these heuristics can significantly outperform naive exponential bounds on moderate problem sizes, though they do not overturn the fundamental exponential scaling for large-scale, highly entangled circuits.
