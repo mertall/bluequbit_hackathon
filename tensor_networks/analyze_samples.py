@@ -43,31 +43,6 @@ def majority_vote_from_file(filename, num_qubits):
     print(f"Total samples processed: {total_samples}")
     return ''.join(final_bits)
 
-def plot_bit_position_histogram(filename, num_qubits):
-    """
-    Plot a histogram of the count of '1's at each qubit position.
-    """
-    bit_counts = [defaultdict(int) for _ in range(num_qubits)]
-    with open(filename, 'r') as f:
-        for line in f:
-            sample = line.strip()
-            if len(sample) != num_qubits:
-                continue
-            for i, bit in enumerate(sample):
-                bit_counts[i][bit] += 1
-
-    # For each qubit, compute the count of '1's.
-    fractions = [bit_counts[i].get('1', 0) for i in range(num_qubits)]
-    
-    plt.figure(figsize=(12, 4))
-    plt.bar(np.arange(num_qubits), fractions, color='skyblue')
-    plt.xlabel("Qubit Position")
-    plt.ylabel("Count of '1's")
-    plt.title("Bit '1' Count at Each Qubit Position")
-    plt.xticks(np.arange(num_qubits))
-    plt.tight_layout()
-    plt.show()
-
 def check_repeats_from_file(filename, num_qubits):
     """
     Reads the file and returns a dictionary of bitstrings that appear more than once.
@@ -89,9 +64,6 @@ if __name__ == "__main__":
     # Compute and print the final bitstring via majority vote.
     final_bitstring = majority_vote_from_file(filename, num_qubits)
     print(f"Final bitstring (majority vote):\n{final_bitstring}")
-
-    # Optionally, plot the bit position histogram.
-    plot_bit_position_histogram(filename, num_qubits)
 
     # Check for any repeated bitstrings and print them.
     repeats = check_repeats_from_file(filename, num_qubits)

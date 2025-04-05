@@ -21,7 +21,7 @@ def compute_majority_vote(bit_counts, num_qubits):
         count_0 = bit_counts[i].get('0', 0)
         count_1 = bit_counts[i].get('1', 0)
         # In case of a tie, choose '1'
-        final_bits.append('1' if count_1 >= count_0 else '0')
+        final_bits.append('1' if count_1 > count_0 else '0')
     return ''.join(final_bits)
 
 def main():
