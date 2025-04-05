@@ -59,15 +59,16 @@ The circuit’s tensor network is simplified using a sequence of local simplific
 - C: Column reduction
 - R: Rank simplification
 - S: Split simplification
+
 The order matters since each operation transforms the network differently. In practice, we experiment with different sequences (e.g. "CR", "R", or the full "ADCRS") to balance contraction speed, memory usage, and numerical accuracy.
 
 ### Contraction Path Optimization
 
 We leverage cotengra for finding efficient contraction paths. In our setup, we use a reusable hyperoptimizer with parameters tuned to our circuit’s complexity. For instance, we often choose optlib="nevergrad" or "optuna" (depending on our trade-off between exploration and speed) and set parameters such as:
 
-minimize="combo" (a balanced cost function)
-parallel=True to utilize multiple CPU cores
-A limited max_time to prevent overlong optimization
+minimize="combo" (a balanced cost function on memory and computational accuracy)  
+parallel=True to utilize multiple CPU cores  
+A limited max_time to prevent overlong optimization  
 
 ### Sampling Strategy
 
@@ -77,3 +78,9 @@ Samples are streamed directly to a text file. Larger sample sizes led to memory 
 ### Final Value Extraction (60 Qubit Circuit)
 
 For the 60-qubit circuit, after sampling and analyzing many results, the dominant bitstring is extracted via the bitwise majority vote. This final bitstring is our best estimate of the hidden bitstring. In our experiments, we observed that while the samples may differ from run to run due to noise or contraction approximations, the majority vote consolidates the signal to reveal the hidden solution.
+
+## Bonus analysis `tensor_networks/tensor_networks_60q_timed.py`
+
+Started thinking about how we can analyze how many samples it takes to find the right string. For my analysis it took 35 samples in 56 minutes 52.10 seconds. I challenge you to beat this!! 
+
+(I used a M3 Macbook Air with 16 GB RAM)
