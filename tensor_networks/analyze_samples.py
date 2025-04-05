@@ -35,11 +35,11 @@ def majority_vote_from_file(filename, num_qubits):
         count_0 = bit_counts[i].get('0', 0)
         count_1 = bit_counts[i].get('1', 0)
         # In case of tie, choose '1' (or '0' if preferred)
-        if count_1 >= count_0:
+        if count_1 > count_0:
             final_bits.append('1')
-        else:
+        if count_0 > count_1:
             final_bits.append('0')
-    
+
     print(f"Total samples processed: {total_samples}")
     return ''.join(final_bits)
 
@@ -83,7 +83,7 @@ def check_repeats_from_file(filename, num_qubits):
     return repeats
 
 if __name__ == "__main__":
-    filename = "/Users/mridul.sarkar/Documents/BlueQubitHackathon/tensor_networks/samples.txt"  # File with your bitstring samples
+    filename = "./tensor_networks/samples.txt"  # File with your bitstring samples
     num_qubits = 60  # Adjust based on your circuit
 
     # Compute and print the final bitstring via majority vote.
