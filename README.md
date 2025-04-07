@@ -26,25 +26,25 @@ Below are some visuals from this work that I found really cool:
 
 ### 30 Qubit Tensor Network
 
-![30 Qubit Tensor Network](/tensor_networks/30qubit_tensor_network.png)
+![30 Qubit Tensor Network](/tensor_networks/tensor_network_graphs/30qubit_tensor_network.png)
 
 ### 42 Qubit Tensor Network
 
-![42 Qubit Tensor Network](/tensor_networks/42qubit_tensor_network.png)
+![42 Qubit Tensor Network](/tensor_networks/tensor_network_graphs/42qubit_tensor_network.png)
 
 ### 60 Qubit Tensor Network
 
-![60 Qubit Tensor Network](/tensor_networks/60qubit_tensor_network.png)
+![60 Qubit Tensor Network](/tensor_networks/tensor_network_graphs/60qubit_tensor_network.png)
 
 Notice the similarity between the 30 Qubit and 60 Qubit networks. Initially, I thought they were identical until I analyzed the networks post-optimization. Below is the 60 Qubit system after optimization. The 30 Qubit system simplifies significantly after optimization. Fascinating!
 
 ### Optimized 60 Qubit Tensor Network
 
-![Optimized 60 Qubit Tensor Network](/tensor_networks/amplitude_rehearse_ADCRS_60.png)
+![Optimized 60 Qubit Tensor Network](/parameter_tuning_graphs/ADCRS.png)
 
 ### Optimized 30 Qubit Tensor Network
 
-![Optimized 30 Qubit Tensor Network](/tensor_networks/amplitude_rehearse_ADCRS_30.png)
+![Optimized 30 Qubit Tensor Network](/parameter_tuning_graphs/ADCRS_30.png)
 
 ## Tensor Network Techniques
 
@@ -78,11 +78,6 @@ Samples are streamed directly to a text file. Larger sample sizes led to memory 
 ### Final Value Extraction (60 Qubit Circuit)
 
 For the 60-qubit circuit, after sampling and analyzing many results, the dominant bitstring is extracted via the bitwise majority vote. This final bitstring is our best estimate of the hidden bitstring. In our experiments, we observed that while the samples may differ from run to run due to noise or contraction approximations, the majority vote consolidates the signal to reveal the hidden solution.
-
-## Bonus analysis `tensor_networks/tensor_networks_60q_timed.py`
-
-Started thinking about how we can analyze how many samples it takes to find the right string. For my analysis it took 35 samples in 56 minutes 52.10 seconds. I challenge you to beat this!!
-(I used a M3 Macbook Air with 16 GB RAM)
 
 ## Hueristic analysis
 

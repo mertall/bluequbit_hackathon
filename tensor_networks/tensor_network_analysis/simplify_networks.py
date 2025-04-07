@@ -13,7 +13,7 @@ print("Circuit loaded.\n")
 
 
 # Create a folder to save the parameter tuning graphs if it doesn't exist
-output_folder = '/Users/mridul.sarkar/Documents/BlueQubitHackathon/parameter_tuning_graphs'
+output_folder = './parameter_tuning_graphs'
 os.makedirs(output_folder, exist_ok=True)
 
 # Iterate through permutations of "ACDRS", including single values

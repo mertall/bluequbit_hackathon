@@ -116,7 +116,7 @@ def main_tuning():
     print(df)
     
     # --- Plotting Heatmaps ---
-    output_dir = "tensor_networks/parameter_tuning_graphs"
+    output_dir = "./parameter_tuning_graphs"
     os.makedirs(output_dir, exist_ok=True)
     
     metrics = [("avg_sample_time", "Avg Sample Time (sec)"),
@@ -146,7 +146,7 @@ def main_tuning():
                 fig.colorbar(cax, ax=ax, label=label)
     
     plt.tight_layout()
-    fig.savefig(os.path.join(output_dir, "sampling_performance_heatmaps.png"), dpi=300)
+    fig.savefig(os.path.join(output_dir, "sampling_performance_heatmaps_gpu.png"), dpi=300)
     plt.close(fig)
 
 

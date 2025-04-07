@@ -115,7 +115,7 @@ def main_tuning():
     print(df)
     
     # Save raw results to CSV file.
-    output_dir = "tensor_networks/parameter_tuning_graphs"
+    output_dir = "./parameter_tuning_graphs"
     os.makedirs(output_dir, exist_ok=True)
     df.to_csv(os.path.join(output_dir, "raw_results.csv"), index=False)
     
@@ -164,7 +164,7 @@ def main_tuning():
                 fig.colorbar(cax, ax=ax, label=label)
     
     plt.tight_layout()
-    fig.savefig(os.path.join(output_dir, "sampling_performance_heatmaps.png"), dpi=300)
+    fig.savefig(os.path.join(output_dir, "sampling_performance_heatmaps_no_gpu.png"), dpi=300)
     plt.close(fig)
 
 if __name__ == '__main__':
