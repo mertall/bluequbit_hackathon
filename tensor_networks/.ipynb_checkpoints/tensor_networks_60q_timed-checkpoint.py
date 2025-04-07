@@ -43,7 +43,7 @@ def main():
     opt_start = time.perf_counter()
     opt = ctg.ReusableHyperOptimizer(
         parallel=True,
-        optlib="optuna",
+        optlib="optuna",  # Using optuna (or nevergrad) for faster performance.
         max_time="rate:1e8",  # Limit optimization time.
         directory=True,
         progbar=True,

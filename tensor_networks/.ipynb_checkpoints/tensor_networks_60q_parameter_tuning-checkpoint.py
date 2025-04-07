@@ -28,20 +28,8 @@ def compute_majority_vote(bit_counts, num_qubits):
         final_bits.append('1' if count_1 > count_0 else '0')
     return ''.join(final_bits)
 
-def run_experiment(tn_circuit, optimizer_lib, group_size, simplify_sequence, sample_batch_size, target_bitstring, num_samples=3):
-    """
-    For a given set of parameters:
-      - Create a new contraction optimizer with the specified optimizer type using a unique temporary directory.
-      - Work on a deep copy of the circuit to avoid state reuse.
-      - Rehearse the contraction path for the given group size and simplify sequence.
-      - Run the sampling step (num_samples times) to compute the average sample time.
-      - Then, continuously sample while updating per-qubit counts until the majority vote equals the target bitstring.
-      - Return the average sample time, time to target, and the number of samples taken.
-    """
-    # Create a local copy of the circuit
+def run_experiment(tn_circuit, optimizer_lib, group_size, simplify_sequence, sample_batch_size, target_bitstring):
     local_circuit = copy.deepcopy(tn_circuit)
-    
-    # Create a unique temporary directory for this optimizer instance to avoid cached paths
     temp_dir = tempfile.mkdtemp(prefix=f"optimizer_{optimizer_lib}_")
     opt = ctg.ReusableHyperOptimizer(
         parallel=True,
@@ -50,55 +38,36 @@ def run_experiment(tn_circuit, optimizer_lib, group_size, simplify_sequence, sam
         directory=temp_dir,
         progbar=False,
     )
-    
-    # Rehearse the contraction path.
+
     local_circuit.sample_gate_by_gate_rehearse(
         group_size=group_size,
         optimize=opt,
         simplify_sequence=simplify_sequence
     )
-    
-    # Measure average sample time.
-    sample_times = []
-    rng = np.random.default_rng(42)
-    for _ in range(num_samples):
-        start = time.perf_counter()
-        for _ in local_circuit.sample_gate_by_gate(
-                sample_batch_size,
-                group_size=group_size,
-                optimize=opt,
-                simplify_sequence=simplify_sequence,
-                seed=rng):
-            pass
-        end = time.perf_counter()
-        sample_times.append(end - start)
-    avg_sample_time = np.mean(sample_times)
-    
-    # Measure time and samples to reach the target bitstring.
+
     num_qubits = len(target_bitstring)
     position_counts = [defaultdict(int) for _ in range(num_qubits)]
-    found = False
     samples_count = 0
-    start_target = time.perf_counter()
-    rng_target = np.random.default_rng(42)
-    while not found:
+    rng = np.random.default_rng(42)
+
+    start_time = time.perf_counter()
+    while True:
         for b in local_circuit.sample_gate_by_gate(
-                sample_batch_size,
-                group_size=group_size,
-                optimize=opt,
-                simplify_sequence=simplify_sequence,
-                seed=rng_target):
+            sample_batch_size,
+            group_size=group_size,
+            optimize=opt,
+            simplify_sequence=simplify_sequence,
+            seed=rng,
+            backend="pytorch"):
             samples_count += 1
             for i, bit in enumerate(b):
                 position_counts[i][bit] += 1
             current_vote = compute_majority_vote(position_counts, num_qubits)
             if current_vote == target_bitstring:
-                found = True
-                break
-    end_target = time.perf_counter()
-    time_to_target = end_target - start_target
-
-    return avg_sample_time, time_to_target, samples_count
+                end_time = time.perf_counter()
+                total_time = end_time - start_time
+                avg_sample_time = total_time / samples_count
+                return avg_sample_time, total_time, samples_count
 
 def main_tuning():
     # --- Load the circuit ---
@@ -108,10 +77,10 @@ def main_tuning():
     print("Circuit loaded.")
     
     # --- Define the parameter grid ---
-    optimizer_types = ["optuna", "nevergrad"]
-    simplify_sequences = ["ADCRS", "DCRS", "CRS", "CR", "C", "RS", "S"]
-    group_size_values = [5, 10, 15, 20, 25]
-    sample_batch_size_values = [1, 5, 10]
+    optimizer_types = ["optuna"]
+    simplify_sequences = ["ADCRS", "DCRS", "CRS", "CR", "C"]
+    group_size_values = [5, 10, 15]
+    sample_batch_size_values = [1]
     
     # Define the target bitstring (60 bits long).
     target_bitstring = "110101001011010101111001011100001110101101111010100110110001"
@@ -125,7 +94,7 @@ def main_tuning():
                   f"group_size={group_size}, sample_batch_size={sample_batch_size}")
             avg_time, time_to_target, samples_count = run_experiment(
                 tn_circuit, optimizer_lib, group_size, simplify_sequence,
-                sample_batch_size, target_bitstring, num_samples=3)
+                sample_batch_size, target_bitstring)
             results.append({
                 "optimizer": optimizer_lib,
                 "simplify_sequence": simplify_sequence,
@@ -142,17 +111,36 @@ def main_tuning():
             continue
     
     df = pd.DataFrame(results)
-    print("\nSummary of results:")
+    print("\nSummary of raw results:")
     print(df)
     
-    # --- Plotting Heatmaps ---
+    # Save raw results to CSV file.
     output_dir = "tensor_networks/parameter_tuning_graphs"
     os.makedirs(output_dir, exist_ok=True)
+    df.to_csv(os.path.join(output_dir, "raw_results.csv"), index=False)
     
+    # --- Aggregate the results ---
+    agg_df = df.groupby(["optimizer", "simplify_sequence"]).agg(
+        avg_sample_time_mean=("avg_sample_time", "mean"),
+        avg_sample_time_std=("avg_sample_time", "std"),
+        time_to_target_mean=("time_to_target", "mean"),
+        time_to_target_std=("time_to_target", "std"),
+        samples_to_target_mean=("samples_to_target", "mean"),
+        samples_to_target_std=("samples_to_target", "std")
+    ).reset_index()
+    
+    print("\nAggregated results by optimizer and simplify_sequence:")
+    print(agg_df)
+    
+    # Save aggregated results to CSV file.
+    agg_df.to_csv(os.path.join(output_dir, "aggregated_results.csv"), index=False)
+    
+    # --- Plotting Heatmaps ---
     metrics = [("avg_sample_time", "Avg Sample Time (sec)"),
                ("time_to_target", "Time to Target (sec)"),
                ("samples_to_target", "Samples to Target")]
     
+    # Create a figure with subplots for each combination.
     fig, axes = plt.subplots(len(optimizer_types), len(simplify_sequences)*len(metrics),
                              figsize=(20, 8), squeeze=False)
     

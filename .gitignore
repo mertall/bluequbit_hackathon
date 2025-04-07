@@ -1,3 +1,5 @@
 ctg_cache/
 quantumhackathon/
+venv/
+.ipynb_checkpoints/
 

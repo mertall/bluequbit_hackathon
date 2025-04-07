@@ -8,7 +8,7 @@ def main():
     # Setup: Initialize the circuit with 60 qubits and load the QASM file.
     circ = qtn.Circuit(N=60)
     print("Loading circuit...")
-    tensor_network_circuit = circ.from_openqasm2_file(
+    circ = circ.from_openqasm2_file(
         '/Users/mridul.sarkar/Documents/BlueQubitHackathon/circuit_3_60q.qasm'
     )
     print("Circuit loaded.\n")
@@ -16,7 +16,7 @@ def main():
     # Setup the contraction optimizer using cotengra.
     opt = ctg.ReusableHyperOptimizer(
         parallel=True,
-        optlib="optuna",  # Using nevergrad for faster performance.
+        optlib="optuna",
         max_time="rate:1e8",  # Limit optimization time.
         directory=True,
         progbar=True,
@@ -24,7 +24,7 @@ def main():
 
     # Rehearse the sampling path (pre-optimizes contraction paths for each marginal).
     print("Optimizing contraction path...")
-    rehs = tensor_network_circuit.sample_gate_by_gate_rehearse(
+    rehs = circ.sample_gate_by_gate_rehearse(
         group_size=10,
         optimize=opt,
         simplify_sequence="ADCRS"  # Use a simpler sequence to reduce overhead.
@@ -41,7 +41,7 @@ def main():
         
         # Continuous sampling loop.
         while True:
-            for b in tensor_network_circuit.sample_gate_by_gate(
+            for b in circ.sample_gate_by_gate(
                 sample_batch_size,
                 group_size=10,
                 optimize=opt,
