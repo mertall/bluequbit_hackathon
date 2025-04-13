@@ -78,7 +78,3 @@ Samples are streamed directly to a text file. Larger sample sizes led to memory 
 ### Final Value Extraction (60 Qubit Circuit)
 
 For the 60-qubit circuit, after sampling and analyzing many results, the dominant bitstring is extracted via the bitwise majority vote. This final bitstring is our best estimate of the hidden bitstring. In our experiments, we observed that while the samples may differ from run to run due to noise or contraction approximations, the majority vote consolidates the signal to reveal the hidden solution.
-
-## Hueristic analysis
-
-We will present a heuristic study of classical strategies for identifying a hidden bitstring in δ-peaked quantum circuits, circuits whose output distribution is dominated by a single bitstring. While worst-case analyses indicate exponential scaling with circuit size and treewidth, in practice one can exploit path-finding optimizers, partial reuse of contraction paths (rehearsal), and approximate final result to reduce overhead. We outline an experimental setup that systematically varies tensor contraction optimization parameters (group size, optimizer choice, simplification recipes, batch sampling) and measures runtime performance, average sample time, and time to achieve a target bitstring via majority vote. Our results show that these heuristics can significantly outperform naive exponential bounds on moderate problem sizes, though they do not overturn the fundamental exponential scaling for large-scale, highly entangled circuits. Future work will be on large-scale, highly entangled circuits.
