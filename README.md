@@ -1,7 +1,3 @@
-## 📄 Abstract Preprint
-
-[![Preprint](abstract_preview.png)](preprint.pdf)
-
 # BlueQubit Hackathon
 # Project Overview
 
