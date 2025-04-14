@@ -40,7 +40,7 @@ Below are some visuals from this work that I found really cool:
 
 ![60 Qubit Tensor Network](/tensor_networks/tensor_network_graphs/60qubit_tensor_network.png)
 
-Notice the similarity between the 30 Qubit and 60 Qubit networks. Initially, I thought they were identical until I analyzed the networks post-optimization. Below is the 60 Qubit system after optimization. The 30 Qubit system simplifies significantly after optimization. Fascinating!
+Notice the similarity between the 30 Qubit and 60 Qubit networks. Initially, I thought they would be identical in shale after simplification until I analyzed the networks post-optimization. Below is the 60 Qubit system after optimization. The 30 Qubit system simplifies significantly after optimization. Fascinating!
 
 ### Optimized 60 Qubit Tensor Network
 
